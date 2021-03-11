@@ -76,7 +76,7 @@ xpath	Xpath			expression 중에서 검색한 값이 있는지 찾습니다.
 
 ================================================================
 
-Pycharm 프로젝트와 GitHub 저장소 연동하기
+Pycharm 프로젝트와 GitHub 저장소 연동하기 : 대용량 사용(Git Large File Storage)
 https://ellun.tistory.com/280
 
 Github에 100Mb이상 파일 올리는 방법 (오류 해결)
