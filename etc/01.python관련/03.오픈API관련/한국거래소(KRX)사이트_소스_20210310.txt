@@ -1,0 +1,110 @@
+
+========================================================================================
+
+https://tariat.tistory.com/892
+
+* 한국거래소 XML 서비스 URL
+
+1. 실시간시세(국문)
+ http://asp1.krx.co.kr/servlet/krx.asp.XMLSise?code=단축종목코드
+
+2. 실시간시세(영문)
+ http://asp1.krx.co.kr/servlet/krx.asp.XMLSiseEng?code=단축종목코드
+
+3. 공시정보(국,영문)
+ http://asp1.krx.co.kr/servlet/krx.asp.DisList4MainServlet?code=단축코드&gubun=K (K:국문/E:영문)
+
+4. 재무종합(국문)
+http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu?code=단축종목코드
+
+5. 재무종합(영문)
+http://asp1.krx.co.kr/servlet/krx.asp.XMLJemuEng?code=단축종목코드
+
+6. 재무종합2(국문)
+http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu2?code=단축종목코드
+
+7. 재무종합3(국문)
+http://asp1.krx.co.kr/servlet/krx.asp.XMLJemu3?code=단축종목코드
+
+8. 텍스트 
+http://asp1.krx.co.kr/servlet/krx.asp.XMLText?code=단축종목코드
+'''
+
+def get_sise(stock_code, try_cnt):
+
+    try:
+        url="http://asp1.krx.co.kr/servlet/krx.asp.XMLSiseEng?code={}".format(stock_code)
+        req=urlopen(url)
+        result=req.read()
+        xmlsoup=BeautifulSoup(result,"lxml-xml")
+        stock = xmlsoup.find("TBL_StockInfo")
+
+        stock_df=pd.DataFrame(stock.attrs, index=[0])
+        stock_df=stock_df.applymap(lambda x: x.replace(",",""))
+
+        return stock_df
+
+    except HTTPError as e:
+        logging.warning(e)
+        if try_cnt>=3:
+            return None
+        else:
+            get_sise(stock_code,try_cnt=+1)
+
+
+# 주식 시세 DB에 저장하기
+con=sqlite3.connect("./data/div.db")
+stock_code=['005930','066570']
+
+for s in tqdm(stock_code):
+    temp=get_sise(s,1)
+    temp.to_sql(con=con,name="div_stock_sise",if_exists="append")
+    time.sleep(0.5)
+
+con.close()
+
+========================================================================================
+========================================================================================
+
+☞ 기업공시사이트
+https://kind.krx.co.kr/main.do?method=loadInitPage&scrnmode=1
+
+☞ 중시일정(유/무상증자 등등)
+https://kind.krx.co.kr/common/stockschedule.do?method=StockScheduleMain
+
+☞ 오늘의공시
+https://kind.krx.co.kr/disclosure/todaydisclosure.do?method=searchTodayDisclosureMain&marketType=0
+
+☞ 공시-회사별검색
+https://kind.krx.co.kr/disclosure/searchdisclosurebycorp.do?method=searchDisclosureByCorpMain
+
+☞ 공시-상세검색
+https://kind.krx.co.kr/disclosure/details.do?method=searchDetailsMain
+
+☞ 채권공시
+https://kind.krx.co.kr/disclosure/searchbondcorpdisclosure.do?method=searchBondCorpDisclosureMain
+
+☞ ETF
+https://kind.krx.co.kr/disclosure/disclosurebystocktype.do?method=searchDisclosureByStockTypeEtf
+
+☞ ELW
+https://kind.krx.co.kr/disclosure/disclosurebystocktype.do?method=searchDisclosureByStockTypeElw
+
+☞ ELN
+https://kind.krx.co.kr/disclosure/disclosurebystocktype.do?method=searchDisclosureByStockTypeEtn
+
+☞ 신규상장
+https://kind.krx.co.kr/disclosure/details.do?method=searchDetailsMain&disclosureType=02&disTypevalue=0321&disTypename=6
+
+☞ 신규상장기업현황
+https://kind.krx.co.kr/listinvstg/listingcompany.do?method=searchListingTypeMain
+
+☞ 자사주취득/처분
+https://kind.krx.co.kr/corpgeneral/treasurystk.do?method=loadInitPage
+
+☞ 기업분석리포트
+https://kind.krx.co.kr/corpgeneral/companyAnalysisReport.do?method=listingForeignCompanyMain&searchGubun=companyAnalysisReport
+
+========================================================================================
+
+

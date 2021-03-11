@@ -1,0 +1,91 @@
+﻿
+========================================================================================
+
+[Python] - 공공데이터 api 크롤링(날씨데이터 수집)
+https://alex-blog.tistory.com/entry/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D%EC%9D%84-%EC%9C%84%ED%95%9C-Python-%EA%B3%B5%EA%B3%B5%EB%8D%B0%EC%9D%B4%ED%84%B0-api-%ED%81%AC%EB%A1%A4%EB%A7%81?category=865129
+
+전자공시시스템 API
+https://opendart.fss.or.kr/intro/main.do
+
+금융투자협회 - 금융투자회사공시검색
+http://dis.kofia.or.kr/websquare/index.jsp?w2xPath=/wq/compann/DISCompAnnSrch.xml&divisionId=MDIS02001000000000&serviceId=SDIS02001000000
+
+금융감독원_공시정보_공시검색
+https://www.data.go.kr/data/3075133/openapi.do
+https://opendart.fss.or.kr/guide/detail.do?apiGrpCd=DS001&apiId=2019001
+{
+	"name":"금융감독원_공시정보_공시검색"
+	,"description":"공시 유형별, 회사별, 날짜별 등 여러가지 조건으로 공시보고서 검색기능을 제공합니다."
+	,"url":"https://www.data.go.kr/data/3075133/openapi.do"
+	,"keywords":["전자공시,공시보고서,기업공시"]
+	,"license":"http://www.kogl.or.kr/info/license.do"
+	,"creator":{
+		"name":"금융감독원"
+		,"contactPoint":{
+			"contactType":"전자공시팀"
+			,"telephone":"+82-0231458617"
+			,"@type":"ContactPoint"
+		}
+		,"@type":"Organization"
+	}
+	,"distribution":[
+		{
+			"encodingFormat":"JSON+XML"
+			,"contentUrl":"https://www.data.go.kr/data/3075133/openapi.do"
+			,"@type":"DataDownload"
+		}
+	]
+	,"@context":"https://schema.org"
+	,"@type":"Dataset"
+}
+
+================================================================
+
+★★★금융위원회_채권기본정보
+https://www.data.go.kr/data/15059592/openapi.do
+
+# Python 샘플 코드 #
+
+from urllib2 import Request, urlopen
+from urllib import urlencode, quote_plus
+
+url = 'http://apis.data.go.kr/1160100/service/GetBondIssuInfoService/getBondBasiInfo'
+queryParams = '?' + urlencode({ quote_plus('ServiceKey') : '서비스키', quote_plus('numOfRows') : '1', quote_plus('pageNo') : '1', quote_plus('resultType') : 'xml', quote_plus('serviceKey') : '공공데이터포털에서 받은 인증키', quote_plus('basDt') : '20200409', quote_plus('crno') : '0000000000000', quote_plus('bondIsurNm') : '골드만삭스인터내셔널' })
+
+request = Request(url + queryParams)
+request.get_method = lambda: 'GET'
+response_body = urlopen(request).read()
+print response_body
+
+================================================================
+================================================================
+
+★★★금융위원회_채권권리행사정보
+https://www.data.go.kr/data/15059595/openapi.do
+
+# Python 샘플 코드 #
+
+from urllib2 import Request, urlopen
+from urllib import urlencode, quote_plus
+
+url = 'http://apis.data.go.kr/1160100/service/GetBondRedeInfoService/getEarlExerOpti'
+queryParams = '?' + urlencode({ quote_plus('ServiceKey') : '서비스키', quote_plus('numOfRows') : '1', quote_plus('pageNo') : '1', quote_plus('resultType') : 'xml', quote_plus('serviceKey') : '공공데이터포털에서 받은 인증키', quote_plus('basDt') : '20200714', quote_plus('crno') : '1101110194277', quote_plus('bondIsurNm') : '두산건설' })
+
+request = Request(url + queryParams)
+request.get_method = lambda: 'GET'
+response_body = urlopen(request).read()
+print response_body
+
+================================================================
+================================================================
+
+
+================================================================
+
+
+
+
+
+
+
+

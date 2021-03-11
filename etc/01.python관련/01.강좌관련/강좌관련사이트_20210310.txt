@@ -1,0 +1,85 @@
+﻿
+========================================================================================
+
+☞ 파이참 설치
+https://wikidocs.net/book/2070
+https://blog.naver.com/ocmarketing/222197056590
+
+☞ 클라우드 기반 코딩 플랫폼
+https://repl.it/
+
+☞ Chrome DevTools Protocol 관련
+https://chromedevtools.github.io/devtools-protocol/tot/Browser/
+
+☞ Microsoft Edge DevTools 프로토콜
+https://blogs.windows.com/msedgedev/2018/05/11/introducing-edge-devtools-protocol/
+
+☞ WebDriver
+https://devahea.github.io/2019/05/01/WebDriver-VS-DevTools-Protocol/
+
+☞ Headless Browser
+https://devahea.github.io/2019/04/13/Headless-Browser%EB%9E%80/
+https://github.com/kji6252/study-puppeteer
+https://pptr.dev/
+
+☞ 웹 크롤링(= Web Scraping)
+https://medium.com/webeveloper/%EC%9E%90%EB%B0%94-%EC%9B%B9-%ED%81%AC%EB%A1%A4%EB%A7%81-web-scraping-1f606994e618
+https://www.seenbuy.kr/%EC%9B%B9-%EC%8A%A4%ED%81%AC%EB%A0%88%EC%9D%B4%ED%8D%BC-chrome-extension-%ED%81%AC%EB%A1%AC-%ED%99%95%EC%9E%A5%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8-site-parsing-tool/#sthash.iMiPvjMf.dpbs
+
+☞ 파이썬크롤링
+https://blog.naver.com/ridesafe/221969995171
+
+☞ Headless 크롬으로 크롤링하기
+https://beomi.github.io/gb-crawling/posts/2017-09-28-HowToMakeWebCrawler-Headless-Chrome.html
+
+[Python] - 파이썬, SQL 연동하기
+https://alex-blog.tistory.com/entry/Python-%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%97%90%EC%84%9C-MSSQL-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0?category=865129
+
+PyCharm에서 Pyinstaller를 편하게 연결해서 사용하는 방법
+https://astrocosmos.tistory.com/158
+
+■ 엑셀파일 로드하여 사이트에서 검색하고 결과값 저장 샘플
+https://galid1.tistory.com/478
+
+■ 파이썬 레시피 웹활용 입문편
+https://gosmcom.tistory.com/category/2018~/%ED%8C%8C%EC%9D%B4%EC%84%A0%20%EB%A0%88%EC%8B%9C%ED%94%BC%20%EC%9B%B9%20%ED%99%9C%EC%9A%A9%20%EC%9E%85%EB%AC%B8%ED%8E%B8
+
+■ 이메일 보내기
+https://gosmcom.tistory.com/74?category=335277
+
+■ beautiful-soup을 사용하여 데이터를 파싱하는 방법과 Selenium을 사용하여 데이터를 파싱하는 방법
+https://medium.com/@nsh235482/python-selenium%EC%9C%BC%EB%A1%9C-%EC%9B%B9%EC%82%AC%EC%9D%B4%ED%8A%B8-%ED%81%AC%EB%A1%A4%EB%A7%81%ED%95%98%EA%B8%B0-3-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%8C%8C%EC%8B%B1-383f2f72e8f4
+
+■ Element 찾기
+https://www.selenium.dev/documentation/ko/getting_started_with_webdriver/locating_elements/
+cheese = driver.find_element(By.ID, "cheese")
+cheddar = cheese.find_elements_by_id("cheddar")
+cheddar = driver.find_element_by_css_selector("#cheese #cheddar")
+
+<ol id=cheese>
+ <li id=cheddar>…
+ <li id=brie>…
+ <li id=rochefort>…
+ <li id=camembert>…
+</ol>
+mucho_cheese = driver.find_elements_by_css_selector("#cheese li")
+
+Locator				Description
+class name			class name 중에서 검색한 값이 있는지 찾습니다.
+css selector			CSS selector 속성 중에서 검색한 값이 있는지 찾습니다.
+id						ID 속성 중에서 검색한 값이 있는지 찾습니다.
+name					NAME 속성 중에서 검색한 값이 있는지 찾습니다.
+link text				보이는 텍스트 중에서 검색한 값이 있는지 찾습니다.
+partial link text		보이는 텍스트 중에서 검색한 값이 있는지 찾습니다.
+tag name			tag name 중에서 검색한 값이 있는지 찾습니다.
+xpath	Xpath			expression 중에서 검색한 값이 있는지 찾습니다.
+
+================================================================
+
+
+
+
+
+
+
+

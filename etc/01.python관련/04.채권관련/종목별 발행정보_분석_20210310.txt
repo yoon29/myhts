@@ -1,0 +1,125 @@
+
+금융투자협회 채권정보센터
+http://www.kofiabond.or.kr/index.html
+
+========================================================================================
+
+■■■ 종목별 채권발행정보 - 목록
+http://www.kofiabond.or.kr/websquare/websquare.html?w2xPath=/xml/subMain.xml&divisionId=MBIS01020020000000&parentDivisionId=MBIS01020000000000&parentMenuIndex=1&menuIndex=1
+
+▶ 조건/조회
+<div id="group89" class="w2group impCoheader">
+
+	<div id="group112" class="w2group impCorow1">
+		<div id="textbox76" class="w2textbox impCotic">채권종류</div>
+	</div>
+	<div id="group113" class="w2group impCoco3">
+		<div id="group114" class="w2group mgt8 mgl10">
+			<label id="textbox77" class="w2textbox hid" for="selectbox1_input_0">신용등급</label>
+			<div id="selectbox1" class="w2selectbox_native fixedWidth fl mgr10 w120">
+				<div class="w2selectbox_native_innerDiv">
+					<select class="w2selectbox_native_select" id="selectbox1_input_0">
+						<option>선택</option>
+						<option>국채</option>
+						<option>지방채</option>
+						<option>특수채</option>
+						<option>통안증권</option>
+						<option>은행채</option>
+						<option>기타금융채</option>
+						<option>회사채</option>
+						<option>ABS</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="group115" class="w2group impCorow1">
+		<div id="textbox78" class="w2textbox impCotic">잔존기간</div>
+	</div>
+	<div id="group116" class="w2group impCoco3">
+		<div id="group117" class="w2group mgt8 mgl10">
+			<label id="textbox79" class="w2textbox hid" for="selectbox2_input_0">신용등급</label>
+			<div id="selectbox2" class="w2selectbox_native fixedWidth fl mgr10 w120">
+				<div class="w2selectbox_native_innerDiv">
+					<select class="w2selectbox_native_select" id="selectbox2_input_0">
+						<option>전체</option>
+						<option>3개월</option>
+						<option>6개월</option>
+						<option>9개월</option>
+						<option>1년</option>
+						<option>1년 6개월</option>
+						<option>2년</option>
+						<option>2년 6개월</option>
+						<option>3년</option>
+						<option>5년</option>
+						<option>10년</option>
+						<option>20년</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="group106" class="w2group impCorow1">
+		<div id="textbox72" class="w2textbox impCotic">이자지급</div>
+	</div>
+	<div id="group107" class="w2group impCoco3">
+		<div id="group108" class="w2group mgt8 mgl10">
+			<label id="textbox73" class="w2textbox hid" for="selectbox3_input_0">신용등급</label>
+			<div id="selectbox3" class="w2selectbox_native fixedWidth fl mgr10 w120">
+				<div class="w2selectbox_native_innerDiv">
+					<select class="w2selectbox_native_select" id="selectbox3_input_0">
+					<option>전체</option>
+					<option>이권부</option>
+					<option>할인부</option>
+					<option>복리부</option>
+					<option>단리부</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+<div id="grpDay" class="w2group impCocontent">
+	<div id="group9" class="w2group impCorow1">
+		<div id="group118" class="w2group mgt8 mgl5">
+			<label id="textbox80" class="w2textbox hid" for="selectbox4_input_0">조회기준</label>
+			<div id="selectbox4" class="w2selectbox_native fixedWidth fl w80">
+				<div class="w2selectbox_native_innerDiv">
+					<select class="w2selectbox_native_select" id="selectbox4_input_0">
+						<option>종목명</option>
+						<option>표준코드</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="group6" class="w2group impCoco0">
+		<div id="group7" class="w2group mgl10">
+			<label id="textbox3" class="w2textbox hid" for="search1">종목검색</label>
+			<input id="input2" class="w2input fl mgt8 mgr5 h18" type="text">
+		</div>
+		<a id="group36" class="w2group  fr mgt7 mgr10" href="javascript:searchBeforeCheck();" title="조회" target="">
+			<img id="image21" src="/images/sub/sub_search_btn03.gif" class="w2image " alt="조회">
+		</a>
+	</div>
+</div>
+
+
+▶ 엑셀 다운로드
+<a id="grpExcel" class="w2group fl mgl5 mgr5" href="javascript:excelDownLoad();" title="엑셀 다운로드 바로가기">
+	<img id="imgExcel" src="/images/sub/excel_btn.gif" class="w2image " alt="엑셀 다운로드 아이콘 이미지">
+</a>
+
+========================================================================================
+========================================================================================
+
+
+
+========================================================================================
+
+

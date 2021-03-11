@@ -1,0 +1,230 @@
+
+python
+https://www.youtube.com/watch?v=M6kQTpIqpLs
+
+# def : 함수
+def chat():
+	print("알랙스")
+	print("윤하")
+
+chat()
+chat()
+
+def chat(name1, name2, age):
+	print("%s: 안녕 넌 몆살이니" % name1)
+	print("%s: 나는 %d" % (name2, age))
+
+chat("알랙스", "윤하", 10)
+
+def dsum(a, b):
+	result = a + b
+	return result
+
+d = dsum(1, 2)
+print(d)
+
+
+# if
+if 2 > 1:
+	print("aaa")
+elif 2> 3:
+	print("aaa")
+else:
+	print("aaa")
+	
+
+# for while
+# break continue
+
+for i in range(3):
+	print("aaa")
+	
+while i < 3:
+	print(i)
+	print("aaa")
+	i = i +1
+
+# 리스트, 튜플, 딕션너리
+
+x = list()
+y = []
+
+x = [1,2,3,4]
+y = ["hello", "world"]
+z = ["hello",1,2,3]
+
+print(x + y)
+print(x[0])
+
+x[3] = 10
+print(x)
+
+# len sorted(소팅) sum(합계) index(위치찾기)
+print(len(x))
+
+x = [4,3,2,1]
+y = ["hello", "there"]
+print(sorted(x))
+print(sum(x))
+
+for n in x:
+	print(n)
+
+print(x.index(3))
+print("hello" in y)  # "hello"가 있는지만 체크 => True / False
+
+if "hello" in y:
+	print("aaa")
+
+
+# 튜플 => 리스트처럼 안에 값을 바꿀수 없다 x[10] = 1 이 안됨 : 불변
+x = (1,2,3,4)
+y = ("hello", "world")
+z = ("hello",1,2,3)
+
+
+# 딕션너리 => key value 구조
+x = dict()
+y = {}
+
+x = {
+	"name": "워니",
+	"age": 20,
+	0: "hello",
+}
+
+print(x)
+print(x["name"])
+
+print("name" in x) #"name"이 포함되어 있는지 체크
+print(x.keys())
+print(x.values())
+
+for key in x:
+	print("key: " + str(key))
+	print("value : " + str(x[key]))
+
+x[0] = "워니"
+x["school"] = "aaa"
+
+#==============================================
+
+fruit = ["사과", "사과", "바나나", "바나나", "딸기", "키위", "사과", "사과"]
+d = {}
+
+for f in fruit:
+	if f in d:  # "사과"라는 key가 d라는 딕셔너리에 들어있어?
+		d[f] = d[f] + 1  # 그럼 사과 갯수를 하나 올려줘
+	else:
+		d[f] = 1  # 사과 라는 애가 없으면, 그걸 딕셔너리에 넣고 value는 1로 만들어줘
+
+print(d)
+
+
+
+#===============================================
+# 클래스, 오브젝트(object = instance)
+
+class Person:
+	def __init__(self, name, age)
+		self.name = name
+		self.age = age
+	
+	def say_hello(self, to_name):
+		print("안녕! " + to_name+ " 나는 " + self.name)
+	
+	def introduce(self):
+		print("내 이름은 " + self.name+ " 나는 " + str(self.age) + "살이야")
+	
+wonie = Person("워니")
+michael = Person("마이클")
+jenny = Person("제니")
+
+wonie.say_hello("철수")
+michael.say_hello("영희")
+jenny.say_hello("미지")
+
+
+wonie = Person("워니", 20)
+wonie.introduce()
+
+
+# 상속
+
+class Police(Person):  # Person 상속
+	def arrest(self, to_arrest)
+		print("넌 체포됐다, " + to_arrest)
+
+class Programmer(Person):  # Person 상속
+	def program(self, to_program):
+		print("다음엔 이걸 만들어야겠다: " + to_program)
+
+wonie = Person("워니", 20)
+jenny = Police("제니", 21)
+michael = Programmer("마이클", 22)
+
+wonie.introduce()
+jenny.introduce()
+michael.introduce()
+
+jenny.arrest("워니")
+michael.program("이메일 클라이언트")
+
+
+# 패키지 모듈
+# 폴더생성 animal > cat.py, dog.py, __init__.py 생성
+# cat.py
+class Cat:
+	def hi(self):
+		print("meow") # 고양이가 안녕하는 소리
+
+# dog.py
+class Dog:
+	def hi(self):
+		print("bark!") # 개가 안녕하는 소리
+
+# __init__.py
+from .cat import Cat # . <- "현재 폴더에 있는" cat.py 파일에서 Cat 이라는 클래스를 가져와줘
+from .dog import Dog # . <- "현재 폴더에 있는" dog.py 파일에서 Dog 이라는 클래스를 가져와줘
+
+# main.py
+from animal import dog # animal 패키지에서 dog 라는 모듈을 갖고와줘
+from animal import cat # animal 패키지에서 cat 라는 모듈을 갖고와줘
+
+d = dog.Dog() # instance
+d.hi()
+
+c = cat.Cat()
+c.hi()
+
+from animal import * # animal 패키지에서 갖고 있는 모듈을 다 불러와
+
+d = Dog()
+c =Cat()
+
+d.hi()
+c.hi()
+
+
+#========================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

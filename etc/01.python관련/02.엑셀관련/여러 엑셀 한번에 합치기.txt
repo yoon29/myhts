@@ -1,0 +1,79 @@
+
+[파이썬] 여러 엑셀 한번에 합치기
+https://julee23.tistory.com/14
+
+=================================================================================
+
+방법. 1 : 지정 파일안에 있는 모든 엑셀을 합친다.
+import pandas as pd  
+import numpy as np  
+import glob  
+import sys
+
+#파일 Union  
+all_data = pd.DataFrame()  
+for f in glob.glob('C:/Users/...저장된파일경로/공통파일명_*.xlsx'): # 예를들어 201901, 201902 로 된 파일이면 2019_*  
+	df = pd.read_excel(f)  
+	all_data = all_data.append(df, ignore_index=True)
+
+#데이터갯수확인  
+print(all_data.shape)
+
+#데이터 잘 들어오는지 확인  
+all_data.head()
+
+#파일저장  
+all_data.to_excel("C:/Users/...파일저장경로지정/파일명생성.xlsx", header=False, index=False)
+
+=================================================================================
+=================================================================================
+
+방법 2 : 특정 이름을 가진 엑셀을 합치겠다.(위치는 동일해야함)
+import pandas as pd  
+import sys
+
+#엑셀 파일 이름 입력
+excel_names = ['file.xlsx', 'file2.xlsx', 'file3.xlsx']  
+excels = [pd.ExcelFile(name) for name in excel_names]  
+frames = [x.parse(x.sheet_names[0], header=None,index_col=None) for x in excels]  
+frames[1:] = [df[1:] for df in frames[1:]]  
+combined = pd.concat(frames)
+
+#파일저장
+combined.to_excel("C:/Users/...파일저장경로지정/파일명생성.xlsx", header=False, index=False)
+
+=================================================================================
+=================================================================================
+
+방법 3: 필요한 컬럼들만 선별하여 여러 엑셀 데이터를 합치는 방법.
+import pandas as pd  
+import numpy as np  
+import glob  
+import sys
+
+all_data = pd.DataFrame()
+
+#폴더 경로 지정
+for f in glob.glob('C:/Users/...저장된파일경로/공통파일명*.xlsx'):  
+	data = pd.read_excel(f)
+
+	# 필요한 컬럼 입력
+	columns = ['column1', 'column2', 'coloumn3']
+	df = pd.DataFrame(data, columns=columns)
+	all_data = all_data.append(df, ignore_index=True)
+
+#데이터 갯수 확인
+print(all_data.shape)
+
+#데이터 잘 들어오는지 확인
+all_data.head()
+
+#파일저장
+all_data.to_csv("C:/Users/...파일저장경로지정/파일명생성.csv", header=True, index=False)
+
+=================================================================================
+
+
+
+
+
