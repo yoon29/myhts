@@ -1,0 +1,7 @@
+
+이클립스 강제 종료후에 이클립시 시작시 안될때는 
+자신의  workspace 들어간후 \.metadata\.plugins 경로로 들어간후
+아래 폴더 안의 파일을 지운다  
+
+org.eclipse.jdt.core
+org.eclipse.e4.workbench

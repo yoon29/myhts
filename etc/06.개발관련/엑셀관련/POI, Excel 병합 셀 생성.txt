@@ -1,0 +1,351 @@
+/**
+ * 병합 셀을 생성한다.
+ * 세로 맞춤 : 가운데
+ * 테두리 : 모두
+ * @param row
+ * @param nStart    시작 셀 인덱스
+ * @param nEnd      종료 셀 인덱스
+ * @param font      글꼴
+ * @param bgColor   배경색
+ * @param hAlign    가로 맞춤
+ * @param border    테두리
+ * @return
+ */
+
+private XSSFCell createMergedCell(XSSFRow row, int nStart, int nEnd, Font font, XSSFColor bgColor, short hAlign, short border)
+{
+    short vAlign = CellStyle.VERTICAL_CENTER;
+    XSSFCell returnCell = null;
+    XSSFSheet sheet = row.getSheet();
+    XSSFWorkbook wb = sheet.getWorkbook();
+    XSSFCellStyle cs = wb.createCellStyle();
+
+    //정렬
+    cs.setAlignment(hAlign);
+    cs.setVerticalAlignment(vAlign);
+     
+    //테두리 설정
+    cs.setBorderTop(border);
+    cs.setBorderRight(border);
+    cs.setBorderBottom(border);
+    cs.setBorderLeft(border);
+     
+    //글꼴 설정
+    cs.setFont(font);
+     
+    //배경색 설정
+    if (bgColor != null)
+    {
+        cs.setFillForegroundColor(bgColor);
+        cs.setFillPattern(CellStyle.SOLID_FOREGROUND);
+    }
+     
+    //셀 생성
+    for (int i = nStart; i <= nEnd; i++)
+    {
+        XSSFCell cell = row.createCell(i);
+         
+        if (i == nStart)
+        {
+            returnCell = cell;
+        }
+         
+        cell.setCellStyle(cs);
+    }
+     
+    //병합 영역 설정
+    sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), nStart, nEnd));
+     
+    return returnCell;
+}
+
+======================================================================
+
+======================================================================
+
+셀 병합 CellRangeAddress() 사용 위치, addMergedRegion()
+셀 병합을 위해 사용하는 클래스 CellRangeAddress, addMergedRegion
+ 
+사용하면서 느낀 특징을 간단히 요약하면
+ 
+셀을 병합할때는 데이터가 들어가는 셀의 위치값은 변하지 않는다.
+셀에 들어갈 값을 먼저 넣어주고 
+가로(열) 병합은 병합하고자하는 첫 셀을 만든 후에
+세로(행) 병합은 병합하고자하는 마지막행의 셀을 만든 후에 한다
+ 
+ 
+정의>
+HSSFSheet sheet = wb.createSheet("sheet명");
+sheet.addMergedRegion(new CellRangeAddress(첫행, 마지막행, 첫열, 마지막열));
+ 
+ 
+사용> 
+for 문을 사용해서 데이터를 저장하겠지만 풀어보면 이렇게 사용될 것이다.
+ 
+- 가로(열) 병합: B1, C1 셀 병합
+...
+ // 1행 생성
+row = sheet.creatRow(0);
+// A열 생성
+cell = row.creatCell(0);
+
+// 엑셀의 스타일 적용
+cell.setCellStyle(style);
+
+// B열 생성
+cell = row.creatCell(1);
+
+// 엑셀의 스타일 적용
+cell.setCellStyle(style);
+// B1에 들어갈 값 저장
+cell.setCellValue("값");
+
+// B1, C1 셀 병합
+sheet.addMergedRegion(new CellRangeAddress(0, 0, 1, 2));
+
+// C열 생성
+cell = row.creatCell(2);
+
+// 엑셀의 스타일 적용
+cell.setCellStyle(style);
+...
+
+======================================================================
+
+======================================================================
+
+java excel poi (눈금선,병합,배경색,테두리,글씨체,사이즈,금액,천단위)
+
+Row row = null;
+Cell cell = null;
+int rowCount = 0;
+int cellCount = 0;
+ 
+//1.셀 스타일 및 폰트 설정
+CellStyle styleOfBoardFillFontBlackBold16 = workbook.createCellStyle();
+//정렬
+styleOfBoardFillFontBlackBold16.setAlignment(CellStyle.ALIGN_CENTER); //가운데 정렬
+styleOfBoardFillFontBlackBold16.setVerticalAlignment(CellStyle.VERTICAL_CENTER); //높이 가운데 정렬
+//배경색
+styleOfBoardFillFontBlackBold16.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+styleOfBoardFillFontBlackBold16.setFillPattern(CellStyle.SOLID_FOREGROUND);
+//테두리 선 (우,좌,위,아래)
+styleOfBoardFillFontBlackBold16.setBorderRight(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlackBold16.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlackBold16.setBorderTop(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlackBold16.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//폰트 설정
+Font fontOfGothicBlackBold16 = workbook.createFont();
+fontOfGothicBlackBold16.setFontName("나눔고딕"); //글씨체
+fontOfGothicBlackBold16.setFontHeight((short)(16*20)); //사이즈
+fontOfGothicBlackBold16.setBoldweight(Font.BOLDWEIGHT_BOLD); //볼드 (굵게)
+styleOfBoardFillFontBlackBold16.setFont(fontOfGothicBlackBold16);
+ 
+//2.셀 스타일 및 폰트 설정
+CellStyle styleOfBoardFillFontRedBold14 = workbook.createCellStyle();
+//정렬
+styleOfBoardFillFontRedBold14.setAlignment(CellStyle.ALIGN_CENTER); //가운데 정렬
+styleOfBoardFillFontRedBold14.setVerticalAlignment(CellStyle.VERTICAL_CENTER); //높이 가운데 정렬
+//배경색
+styleOfBoardFillFontRedBold14.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+styleOfBoardFillFontRedBold14.setFillPattern(CellStyle.SOLID_FOREGROUND);
+//테두리 선 (우,좌,위,아래)
+styleOfBoardFillFontRedBold14.setBorderRight(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontRedBold14.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontRedBold14.setBorderTop(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontRedBold14.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//폰트 설정
+Font RedBold14 = workbook.createFont();
+RedBold14.setFontName("나눔고딕"); //글씨체
+RedBold14.setColor(HSSFColor.RED.index);
+RedBold14.setFontHeight((short)(14*20)); //사이즈
+RedBold14.setBoldweight(Font.BOLDWEIGHT_BOLD); //볼드 (굵게)
+styleOfBoardFillFontRedBold14.setFont(RedBold14);
+ 
+//3.셀 스타일 및 폰트 설정
+CellStyle styleOfBoardFillFontBlack11 = workbook.createCellStyle();
+//정렬
+styleOfBoardFillFontBlack11.setAlignment(CellStyle.ALIGN_CENTER); //가운데 정렬
+styleOfBoardFillFontBlack11.setVerticalAlignment(CellStyle.VERTICAL_CENTER); //높이 가운데 정렬
+//배경색
+styleOfBoardFillFontBlack11.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+styleOfBoardFillFontBlack11.setFillPattern(CellStyle.SOLID_FOREGROUND);
+//테두리 선 (우,좌,위,아래)
+styleOfBoardFillFontBlack11.setBorderRight(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlack11.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlack11.setBorderTop(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFillFontBlack11.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//폰트 설정
+Font Black11 = workbook.createFont();
+Black11.setFontName("나눔고딕"); //글씨체
+Black11.setFontHeight((short)(11*20)); //사이즈
+styleOfBoardFillFontBlack11.setFont(Black11);
+ 
+//4.셀 스타일 및 폰트 설정(일반 텍스트)
+CellStyle styleOfBoardFontBlack11 = workbook.createCellStyle();
+//정렬
+styleOfBoardFontBlack11.setAlignment(CellStyle.ALIGN_CENTER); //가운데 정렬
+styleOfBoardFontBlack11.setVerticalAlignment(CellStyle.VERTICAL_CENTER); //높이 가운데 정렬
+//테두리 선 (우,좌,위,아래)
+styleOfBoardFontBlack11.setBorderRight(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFontBlack11.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFontBlack11.setBorderTop(HSSFCellStyle.BORDER_THIN);
+styleOfBoardFontBlack11.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//폰트 설정 (위 폰트 사용)
+styleOfBoardFontBlack11.setFont(Black11);
+ 
+//4.셀 스타일 및 폰트 설정(금액)
+CellStyle styleOfBoardMoneyFontBlack11 = workbook.createCellStyle();
+//정렬
+styleOfBoardMoneyFontBlack11.setAlignment(CellStyle.ALIGN_RIGHT); //우측 정렬
+styleOfBoardMoneyFontBlack11.setVerticalAlignment(CellStyle.VERTICAL_CENTER); //높이 가운데 정렬
+//테두리 선 (우,좌,위,아래)
+styleOfBoardMoneyFontBlack11.setBorderRight(HSSFCellStyle.BORDER_THIN);
+styleOfBoardMoneyFontBlack11.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+styleOfBoardMoneyFontBlack11.setBorderTop(HSSFCellStyle.BORDER_THIN);
+styleOfBoardMoneyFontBlack11.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+//폰트 설정 (위 폰트 사용)
+styleOfBoardMoneyFontBlack11.setFont(Black11);
+//천단위 쉼표, 금액
+styleOfBoardMoneyFontBlack11.setDataFormat(HSSFDataFormat.getBuiltinFormat("#,##0"));
+            
+//Sheet 생성
+Sheet sheet = workbook.createSheet("도서정보");
+ 
+//눈금선 없애기
+sheet.setDisplayGridlines(false);
+ 
+//첫줄 개행
+rowCount++;
+ 
+//열 생성
+row = sheet.createRow(rowCount++);
+cellCount = 0; //셀 카운트 초기화
+ 
+//셀 병합
+sheet.addMergedRegion(new CellRangeAddress(1,4,0,1)); //열시작, 열종료, 행시작, 행종료 (자바배열과 같이 0부터 시작)
+sheet.addMergedRegion(new CellRangeAddress(1,1,2,6));
+ 
+//셀 생성
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16); //위에서 설정한셀 스타일 셋팅
+cell.setCellValue("A문고 상태");
+ 
+//라인을 그리기 위해 실행 (병합이 되어도 테두리 라인을 그리기 위해 셀을 생성하고 스타입을 셋팅)
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontRedBold14);
+cell.setCellValue("도서 정보");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontRedBold14);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontRedBold14);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontRedBold14);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontRedBold14);
+ 
+//2열 작성
+row = sheet.createRow(rowCount++);
+cellCount = 0;
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlack11);
+cell.setCellValue("ID");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlack11);
+cell.setCellValue("도서명");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlack11);
+cell.setCellValue("작가");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlack11);
+cell.setCellValue("가격");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlack11);
+cell.setCellValue("수량");
+ 
+//3열 작성
+row = sheet.createRow(rowCount++);
+cellCount = 0;
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("b1");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("레미제라블");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("빅토르 위고");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardMoneyFontBlack11);
+cell.setCellValue(3000);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardMoneyFontBlack11);
+cell.setCellValue(32);
+ 
+//4열 작성
+row = sheet.createRow(rowCount++);
+cellCount = 0;
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFillFontBlackBold16);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("a32");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("홍길동");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardFontBlack11);
+cell.setCellValue("허균");
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardMoneyFontBlack11);
+cell.setCellValue(8000);
+ 
+cell = row.createCell(cellCount++);
+cell.setCellStyle(styleOfBoardMoneyFontBlack11);
+cell.setCellValue(15);
+
+
+
+추가: 셀 표시형식(날짜)
+CellStyle style = workbook.createCellStyle();
+style.setDataFormat((short) 0xe);
+
+======================================================================
+

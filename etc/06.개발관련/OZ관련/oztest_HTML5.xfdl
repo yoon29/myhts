@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="1.5">
+  <TypeDefinition url="..\default_typedef.xml"/>
+  <Form id="oztest" classname="oztest" left="0" top="0" width="1060" height="1383" titletext="New Form">
+    <Layouts>
+      <Layout>
+        <WebBrowser id="WebBrowser00" left="5.28%" top="264" right="16.98%" height="756" taborder="2"/>
+        <Button id="Button01" taborder="3" text="HTML5 Call" left="5.09%" top="195" right="80%" height="53" onclick="Button01_onclick" style="background:#d4f4faff;color:blue;"/>
+        <Edit id="Edit00" taborder="4" value="Nexacro HTML5 Viewer Call Sample" oneditclick="Edit00_oneditclick" left="5.09%" top="35" right="32.17%" height="138" style="background:#faf4c0ff;color:darkred;padding:0 10 0 10;font:bold italic 16 Arial;shadow:outer 0,0 0 bisque;"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.0"><![CDATA[
+this.Button01_onclick = function(obj:Button,  e:nexacro.ClickEventInfo)
+{
+	this.WebBrowser00.set_url("http://211.116.251.7/oz70/es9119/sample_pc.html");
+}
+
+
+this.Edit00_oneditclick = function(obj:Edit,  e:nexacro.EditClickEventInfo)
+{
+	
+}
+]]></Script>
+  </Form>
+</FDL>

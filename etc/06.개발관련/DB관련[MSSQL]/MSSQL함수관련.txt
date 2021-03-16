@@ -1,0 +1,126 @@
+
+10자리까지 0으로 채움
+SELECT '1111' + REPLICATE(0, 10-LEN('1111'))
+
+
+Convert
+개인적으로 가장 많이 사용하는 데이터변환 함수라고 생각합니다.
+날짜 변환 하는데도 유용하게 사용가능합니다.
+※ 부동 소수점 또는 숫자에서 정수로 변환할때 CONVERT()함수는 결과를 자릅니다. 다른 변환일 경우에는 반올림합니다.
+
+--문법--
+CONVERT(data_type[(length)], expression[style])
+--예시--
+SELECT CONVERT(NVARCHAR(10),칼럼) AS 칼럼명 FROM MY_TABLE --VARCHAR로 변환
+SELECT CONVERT(INT,칼럼) AS 칼럼명 FROM MY_TABLE --INT로 변환
+SELECT CONVERT(CHAR,칼럼) AS 칼럼명 FROM MY_TABLE --CHAR로 변환
+
+--테이블(MY_TABLE)의 나이(AGE)칼럼을 INT에서 CHAR로 형변환--
+SELECT CONVERT(NVARCHAR(10),AGE)+'세'AS 나이 FROM MY_TABLE
+
+--테이블(MY_TALBE)에서 날짜(DTS)칼럼을 INT에서 DATE로 형변환--
+SELECT CONVERT(DATE,SUBSTRING(DTS,1,8))AS 날짜 FROM MY_TABLE
+
+
+
+Cast
+
+※ FLOAT,또는 NUMBERIC에서 INTEGER로 변환할때 CAST()함수는 결과를 자릅니다.
+
+--문법--
+CAST(expression AS data_type(length))
+--예시--
+SELECT CAST(칼럼 AS INT) FROM  MY_TABLE
+
+--테이블(MY_TALBE)에서 가격(PRICE)칼럼을 INT에서 VARCHAR로 형변환
+SELECT CAST(PRICEAS AS VARCHAR)AS 가격 FROM  MY_TABLE
+
+
+
+
+
+LEFT 
+
+Left함수는 문자열을 받아서 왼쪽부터 원하는 길이만큼 자르는 함수이며
+
+주민등록번호만으로도 생년월일을 구하거나 이름을 잘라서 성만 출력하는 등
+
+다양한 방법으로 활용 가능합니다.
+
+
+
+
+사용법
+--문법--
+LEFT(문자열,길이)
+--예시--
+LEFT(NAME,2)
+
+예제
+--테이블(MY_TABLE)에서 이름(NM_KOR)을 잘라 성만 출력--
+SELECT LEFT(NM_KOR,1) AS 이름 FROM MY_TABLE
+
+
+
+
+
+
+
+
+RIGHT
+
+RIGHT함수는 LEFT함수와 기능은 같지만 방향만 다른 함수입니다.
+
+RIGHT함수는 문자열을 받아서 오른쪽부터 원하는 길이만큼 자르는 함수이며
+
+LEFT함수와 마찬가지로 다양하게 사용이 가능합니다.
+
+
+
+
+사용법
+--문법--
+RIGHT(문자열,길이)
+--예시--
+RIGHT(NAME,3)
+
+예제
+--테이블(MY_TABLE)에서 이름(NM_KOR)을 잘라 이름만 출력--
+SELECT RIGHT(NM_KOR,2) AS 이름 FROM MY_TABLE
+
+
+
+
+
+
+
+
+SUBSTRING
+
+SubString함수의 기능은 문자열을 받아서 일정한 영역만큼 잘라낸 후 리턴하는 기능을 가지고 있습니다.
+
+주민등록번호만으로도 성별을 잘라서 활용하거나 날짜를 잘라서 월별로 그룹을 만드는등
+
+다양한 방법으로 활용 가능합니다.
+
+정말 많이쓰이는 문자열함수 중 하나입니다.
+
+
+
+
+사용법
+--문법--
+SUBSTRING(문자열,시작자리번호,자를문자수)
+--예시--
+SUBSTRING(resident_number,0,6)
+
+예제
+--테이블(MY_TABLE)에서 이름 2번째자리에서 2개만 잘라서 출력--
+SELECT SUBSTRING(NM_KOR,2,2) AS 이름 FROM MY_TABLE
+
+--테이블(MY_TABLE)에서 날짜(DT)를 잘라 0000년00월00일 형식으로 만들기--
+SELECT SUBSTRING(DT,1,4)+'년'+SUBSTRING(DT,5,2)+'월'+SUBSTRING(DT,7,2)+'일' AS일자 FROM MY_TABLE
+
+
+
+

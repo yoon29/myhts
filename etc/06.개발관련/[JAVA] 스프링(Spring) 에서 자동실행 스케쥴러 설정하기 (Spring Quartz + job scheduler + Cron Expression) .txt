@@ -1,0 +1,181 @@
+https://junspapa-itdev.tistory.com/18
+[JAVA] 스프링(Spring) 에서 자동실행 스케쥴러 설정하기 (Spring Quartz + job scheduler + Cron Expression) 
+
+
+
+어떤 경우에 사용하나?
+
+주기적으로(ex: 매 1시간 마다) 또는 정해진 시각(ex: 매일 오전 7시) 에 특정 프로세스를 수행하고 싶은 경우에 사용합니다.  저는 매일 오전에 특정 API를 호출해서 데이터를 읽어온 후 형태소분석을 한 후 키워드 노출수를 추출하는 로직에 사용했습니다. 
+
+ 
+
+ 
+
+pom.xml에 dependency 추가
+
+최신 버전은 MAVEN 홈페이지에 참고하세요. 
+
+https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
+<dependency>  
+  <groupId>org.quartz-scheduler</groupId>
+  <artifactId>quartz</artifactId> 
+  <version>2.3.0</version> 
+</dependency>  
+
+ 
+
+로직을 처리할 Job 클래스 생성
+
+QuartzJobBean을 extends 하게 되면 executeInternal 메서드를 오버라이드 하게 되어있습니다. 
+
+스케쥴러에 의해 Job 클래스가 호출되었을 때 해당 메서드가 실행되는 거죠. 
+package kwrd.cloud.util;
+
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.scheduling.quartz.QuartzJobBean;
+
+/**
+ *스케쥴 Job 실행 클래스
+ */
+public class CloudJobExecutor extends QuartzJobBean {
+
+	@Override
+	protected void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
+		// TODO Auto-generated method stub
+		// 실제 수행할 로직..
+	}
+
+}
+
+ 
+
+스프링 설정 파일(Spring Quartz) 설정
+
+context-quartz.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	
+	<!-- <bean name="wordCloudJob" class="org.springframework.scheduling.quartz.JobDetailBean"> Quartz 1.8.x버전-->
+	<bean name="wordCloudJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"><!-- Quartz 2.x 버전 -->
+		<property name="jobClass">
+			<value>kwrd.cloud.util.CloudJobExecutor</value>
+		</property>
+	</bean>
+	
+	<!-- <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> Quartz 1.8.x 버전-->
+	<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"><!-- Quartz 2.x 버전 -->
+		<property name="jobDetail">
+			<ref bean="wordCloudJob"/>
+		</property>
+		<property name="cronExpression">
+			<!-- 매  5분마다 실행 --> 
+			<!-- <value>0 0/5 * * * ?</value> -->
+			<!-- 매일 오후 3시 20분마다 실행  -->
+			<value>0 20 15 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="cronTrigger"/>
+			</list>
+		</property>
+	</bean>
+</beans>
+
+
+Quartz 1.8.x 버전과 Quartz 2.x 버전에 따라 호출하는 class 명이 다릅니다. 본인 버전에 맞게 사용하시면 됩니다.
+
+Quartz 1.8.x 버전
+<bean name="wordCloudJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+
+<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+
+Quartz 2.x 버전
+<bean name="wordCloudJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+
+<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+
+ 
+
+Cron 표현식
+
+Job을 수행할 시간은 Cron 표현식을 사용합니다. 
+
+Cron 표현식 기본구조는 6~7자리가 사용됩니다. 
+
+ *     *     *     *    *      *       *
+
+초    분   시   일   월   요일   년도(생략가능)
+
+요일은 1-7로 표현하시면 되요.(1:일, 2:월, 3:화, 4:수, 5:목, 6:금, 7:토)
+
+ 
+
+위 기본구조에서 몇가지 Cron 표현식을 알려드릴게요.  만들기 쉽습니다. 
+
+10분 마다 실행 :  0 0/10 * * * *
+
+1시간 마다 실행 : 0 0 0/1 * * *
+
+매일 오전 7시 30분에 실행 : 0 30 7 * * *
+
+매월 마지막날 오전 7시에 실행 : 0 0 7 L * ?
+
+ 
+
+?는 어떤값이든 상관없을 때 사용하는 문자이고 L(대문자)는 특정값을 지정할 수 없는 마지막 값을 의미하며 둘 다 날짜와 요일에만 사용가능합니다. 
+
+ 
+
+Cron 표현식을 좀 더 쉽게 만드려면 아래 사이트를 참고하세요. 
+
+http://www.cronmaker.com/
+
+ 
+
+ 
+
+Job Class에서 DB 핸들링을 위해 Service(또는 DAO) 의 메서드를 사용해야할 경우
+
+보통 스프링에서는 Controller, Service, DAO 형태로 클래스를 구분하고, 스프링 설정에서 어노테이션을 이용해서 자동으로 각 클래스에서 사용할 service 및 DAO를 자동으로 매핑해주죠. 
+
+
+
+
+Job Class에서 Service의 메서드를 호출하려면 Spring Quartz 설정 파일을 수정합니다. 
+<!-- Service Class 선언-->
+<bean id="wordCloudService" class="kwrd.cloud.service.impl.WordCloudServiceImpl" />
+
+<bean name="wordCloudJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean"><!-- Quartz 2.x 버전 -->
+  <property name="jobClass">
+    <value>kwrd.cloud.util.CloudJobExecutor</value>
+  </property>
+  <!--jobClass에 넘길 데이터에 위에 선언한 Service 세팅 -->
+  <property name="jobDataAsMap">
+    <map>
+      <entry key="wordCloudService" value-ref="wordCloudService"/>
+    </map>
+  </property>
+</bean>
+
+ 
+
+그리고 Job Class에 service setter()를 만들어 놓으면 jobClass에서 service가 자동으로 매핑되어 사용할 수 있게 됩니다.
+private WordCloudService wordCloudService;
+
+public void setWordCloudService(WordCloudService wordCloudService) {
+  this.wordCloudService = wordCloudService;
+}
+
+..
+//실제 Service 호출
+wordCloudService.insertIssueKwrd(kwrdList);
+
+
+
+

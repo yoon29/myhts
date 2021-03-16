@@ -1,0 +1,73 @@
+
+[Sql] 지운데이터 복구
+https://hatssarjy.tistory.com/290
+
+
+
+10분전 삭제한 데이터 복구 
+
+SELECT * FROM TB AS OF TIMESTAMP (SYSTIMESTAMP-INTERVAL ‘10’MINUTE) WHERE NAME =’홍길동’
+ 
+ 
+
+================================================================================
+
+누가.. 세 테이블의 데이터를 지웠단다.. 
+그리고, 복구가 시급하단다. ㅋ
+
+
+
+select * 
+   from  user_tables
+where table_name in ('EXPERTREVIEW' , 'EXPERTREVIEWMAP', 'EXPERTREVIEWPAGE');
+
+
+엇.. 테이블은 있다....
+
+이 테이블을 드랍한건지 delete한건지 몰라
+후다닥 이 쿼리를 날렸다.
+
+
+select * 
+   from  recyclebin 
+where original_name in ('EXPERTREVIEW' , 'EXPERTREVIEWMAP', 'EXPERTREVIEWPAGE');
+
+
+
+어... 결과값이 없다. 흠 delete나 truncate 한것이겠군..
+담당자에게 물으니 18시10분쯤 지운거 같다고 했다.
+
+18시 데이터 기준으로 테이블을 찍어냈다.
+
+
+
+create table expertreview_1801 
+nologging 
+as 
+select * from EXPERTREVIEW as of timestamp to_timestamp('20090616180100','yyyymmddhh24miss');
+
+이 테이블 확인해보라고 했더니.. 이걸로 복구하면 된단다.
+
+
+
+rename expertreview to expertreview_bak;
+
+rename expertreview_1801 to expertreview;
+
+alter table expertreview_bak drop constraints EXPERTREVIEW_PK
+
+drop index EXPERTREVIEW_PK;
+
+alter table expertreview add constraint expertreview_pk primary key (expertid)
+using index tablespace expertidx1;
+
+스크립트 후다닥 만들어서 대충 돌렸다.
+백업본이 있으니 변경사항은 _bak 테이블을 활용하면 좋겠다.
+
+
+
+Using Flashback Query (SELECT ... AS OF)
+
+ 
+ 
+ 

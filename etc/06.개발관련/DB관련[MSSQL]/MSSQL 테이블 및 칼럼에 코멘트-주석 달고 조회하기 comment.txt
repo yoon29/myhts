@@ -1,0 +1,90 @@
+MSSQL 테이블 및 칼럼에 코멘트/주석 달고 조회하기 comment
+
+--테이블 코멘트 추가
+EXEC sp_addextendedproperty 'MS_Description', '테이블설명', 'USER', DBO, 'TABLE', 테이블이름
+--테이블 코멘트 삭제
+EXEC sp_dropextendedproperty 'MS_Description', 'SCHEMA', DBO, 'TABLE', 테이블이름, DEFAULT, DEFAULT
+ 
+ 
+-- 칼럼 코멘트 추가
+EXEC sp_addextendedproperty 'MS_Description', '컬럼설명', 'USER', DBO, 'TABLE', 테이블이름, 'COLUMN', 칼럼이름
+-- 칼럼 코멘트 삭제
+EXEC sp_dropextendedproperty 'MS_Description', 'SCHEMA', DBO, 'TABLE', 테이블이름, 'COLUMN', 칼럼이름
+ 
+ 
+--테이블 코멘트 조회
+SELECT OBJTYPE, OBJNAME, NAME, VALUE
+FROM ::FN_LISTEXTENDEDPROPERTY (NULL, 'SCHEMA', 'DBO', 'TABLE', '테이블이름', DEFAULT, DEFAULT)
+ 
+--컬럼 코멘트 조회
+SELECT OBJTYPE, OBJNAME, NAME, VALUE
+FROM ::FN_LISTEXTENDEDPROPERTY(NULL, 'SCHEMA', 'DBO', 'TABLE', '테이블이름', 'COLUMN', DEFAULT)
+ 
+ 
+-- 전체 테이블 코멘트 조회
+SELECT
+        NAME
+        , (SELECT VALUE FROM SYS.EXTENDED_PROPERTIES WHERE MAJOR_ID = A.ID AND MINOR_ID = 0 ) COMMENT
+FROM SYSOBJECTS A
+WHERE RTRIM(A.XTYPE) = 'U'
+ORDER BY NAME
+ 
+ 
+-- 전체 테이블 별 칼럼 코멘트 조회
+SELECT      u.name + '.' + t.name AS [table],
+            td.value AS [table_desc],
+            c.name AS [column],
+            cd.value AS [column_desc]
+FROM        sysobjects t
+INNER JOIN  sysusers u
+    ON      u.uid = t.uid
+LEFT OUTER JOIN sys.extended_properties td
+    ON      td.major_id = t.id
+    AND     td.minor_id = 0
+    AND     td.name = 'MS_Description'
+INNER JOIN  syscolumns c
+    ON      c.id = t.id
+LEFT OUTER JOIN sys.extended_properties cd
+    ON      cd.major_id = c.id
+    AND     cd.minor_id = c.colid
+    AND     cd.name = 'MS_Description'
+WHERE t.type = 'u'
+ORDER BY    t.name, c.colorder
+ 
+======================================================================
+
+Table & Column Description 가져오기
+
+DECLARE @TABLE_NAME NVARCHAR(50) = '테이블이름';
+SELECT D.COLORDER                AS COLUMN_IDX            -- Column Index
+     , A.NAME                    AS TABLE_NAME            -- Table Name
+     , C.VALUE                    AS TABLE_DESCRIPTION    -- Table Description
+     , D.NAME                    AS COLUMN_NAME            -- Column Name
+     , E.VALUE                    AS COLUMN_DESCRIPTION    -- Column Description
+     , F.DATA_TYPE                AS TYPE                    -- Column Type
+     , F.CHARACTER_OCTET_LENGTH    AS LENGTH                -- Column Length
+     , F.IS_NULLABLE            AS IS_NULLABLE            -- Column Nullable
+     , F.COLLATION_NAME            AS COLLATION_NAME        -- Column Collaction Name
+  FROM SYSOBJECTS A WITH (NOLOCK)
+  INNER JOIN SYSUSERS B WITH (NOLOCK)        ON A.UID = B.UID
+  INNER JOIN SYSCOLUMNS D WITH (NOLOCK)        ON D.ID = A.ID
+  INNER JOIN INFORMATION_SCHEMA.COLUMNS F WITH (NOLOCK)
+     ON A.NAME = F.TABLE_NAME
+    AND D.NAME = F.COLUMN_NAME
+   LEFT OUTER JOIN SYS.EXTENDED_PROPERTIES C WITH (NOLOCK)
+     ON C.MAJOR_ID = A.ID
+    AND C.MINOR_ID = 0
+    AND C.NAME = 'MS_Description'
+   LEFT OUTER JOIN SYS.EXTENDED_PROPERTIES E WITH (NOLOCK)
+     ON E.MAJOR_ID = D.ID
+    AND E.MINOR_ID = D.COLID
+    AND E.NAME = 'MS_Description'  
+  WHERE 1=1
+    AND A.TYPE = 'U'
+    AND A.NAME = @TABLE_NAME
+  ORDER BY D.COLORDER
+
+
+
+
+
