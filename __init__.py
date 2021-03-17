@@ -1,5 +1,5 @@
 import sys
-sys.path.append("C:/Users/USER/PycharmProjects/week1/")
+sys.path.append("C:/Users/USER/PycharmProjects/myhts/")
 
 from kiwoom.kiwoom import *
 from PyQt5.QtWidgets import *
