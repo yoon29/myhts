@@ -83,12 +83,13 @@ class Kiwoom(QAxWidget):
             fids = self.realType.REALTYPE['주식체결']['체결시간']
             self.dynamicCall("SetRealReg(QString, QString, QString, QString)", screen_num, code, fids, "1")
 
-        self.slack.notification(
-            pretext="주식자동화 프로그램 동작",
-            title="주식 자동화 프로그램 동작",
-            fallback="주식 자동화 프로그램 동작",
-            text="주식 자동화 프로그램이 동작 되었습니다."
-        )
+        # 설정완료후 주석해제
+        # self.slack.notification(
+        #     pretext="주식자동화 프로그램 동작",
+        #     title="주식 자동화 프로그램 동작",
+        #     fallback="주식 자동화 프로그램 동작",
+        #     text="주식 자동화 프로그램이 동작 되었습니다."
+        # )
 
     def get_ocx_instance(self):
         self.setControl("KHOPENAPI.KHOpenAPICtrl.1") # 레지스트리에 저장된 API 모듈 불러오기
@@ -429,6 +430,7 @@ class Kiwoom(QAxWidget):
         self.all_stock_dict.update({'미체결종목': self.not_account_stock_dict})
         self.all_stock_dict.update({'포트폴리오종목': self.portfolio_stock_dict})
 
+    # 종목이 중복되지 않게 정리
     def screen_number_setting(self):
         screen_overwrite = []
 
